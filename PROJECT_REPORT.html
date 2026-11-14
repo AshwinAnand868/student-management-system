@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment Submission - Student Management System REST API</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+            background-color: #f9fafb;
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 48px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .header {
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 24px;
+            margin-bottom: 32px;
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #111827;
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0 0 8px 0;
+        }
+
+        .header .subtitle {
+            color: #4b5563;
+            font-size: 16px;
+            margin-bottom: 16px;
+        }
+
+        .meta-box {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            background: #f3f4f6;
+            padding: 16px 20px;
+            border-radius: 8px;
+            text-align: left;
+            font-size: 14px;
+            color: #374151;
+            margin-top: 16px;
+        }
+
+        h2 {
+            color: #1f2937;
+            font-size: 20px;
+            border-left: 4px solid #3b82f6;
+            padding-left: 12px;
+            margin-top: 36px;
+            margin-bottom: 16px;
+        }
+
+        h3 {
+            color: #374151;
+            font-size: 16px;
+            margin-top: 24px;
+            margin-bottom: 8px;
+        }
+
+        p, li {
+            font-size: 14px;
+            color: #4b5563;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 13px;
+        }
+
+        th, td {
+            border: 1px solid #e5e7eb;
+            padding: 10px 14px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f8fafc;
+            color: #1e293b;
+            font-weight: 600;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .badge-post { background-color: #fef3c7; color: #92400e; }
+        .badge-get { background-color: #d1fae5; color: #065f46; }
+        .badge-put { background-color: #ffedd5; color: #9a3412; }
+        .badge-delete { background-color: #fee2e2; color: #991b1b; }
+
+        .screenshot-card {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 24px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .screenshot-card h4 {
+            margin: 0 0 8px 0;
+            font-size: 15px;
+            color: #111827;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .screenshot-desc {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 12px;
+        }
+
+        .screenshot-img {
+            width: 100%;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            display: block;
+        }
+
+        pre {
+            background: #1e293b;
+            color: #f8fafc;
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+        }
+
+        @media print {
+            body { background: white; padding: 0; }
+            .container { box-shadow: none; padding: 0; max-width: 100%; }
+            .screenshot-card { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Student Management REST API</h1>
+        <div class="subtitle">Java Programming — End Semester Practical Assignment</div>
+        <div class="meta-box">
+            <div><strong>Project:</strong> Student Management System REST API</div>
+            <div><strong>Technology:</strong> Spring Boot 3, JPA & MySQL</div>
+            <div><strong>Server Port:</strong> 8080</div>
+            <div><strong>Base URL:</strong> <code>http://localhost:8080/api/students</code></div>
+        </div>
+    </div>
+
+    <h2>1. Entity Requirements</h2>
+    <p>The <code>Student</code> entity represents students enrolled in courses, mapped to the MySQL <code>students</code> table using Spring Data JPA.</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Attribute</th>
+                <th>Data Type</th>
+                <th>Constraints & Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>id</code></td>
+                <td>Long</td>
+                <td>Primary Key, Auto-incremented (<code>@Id, @GeneratedValue(strategy = GenerationType.IDENTITY)</code>)</td>
+            </tr>
+            <tr>
+                <td><code>name</code></td>
+                <td>String</td>
+                <td>Student's full name (Mandatory, <code>@NotBlank</code>)</td>
+            </tr>
+            <tr>
+                <td><code>email</code></td>
+                <td>String</td>
+                <td>Unique email address (<code>@NotBlank, @Email, unique = true</code>)</td>
+            </tr>
+            <tr>
+                <td><code>course</code></td>
+                <td>String</td>
+                <td>Enrolled course name (<code>@NotBlank</code>)</td>
+            </tr>
+            <tr>
+                <td><code>age</code></td>
+                <td>Integer</td>
+                <td>Student's age (<code>@NotNull, @Min(1)</code>)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>2. REST API Endpoints Specification</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Method</th>
+                <th>Endpoint</th>
+                <th>Description</th>
+                <th>Status Code</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="badge badge-post">POST</span></td>
+                <td><code>/api/students</code></td>
+                <td>Add a new student</td>
+                <td><code>201 Created</code></td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-get">GET</span></td>
+                <td><code>/api/students</code></td>
+                <td>Retrieve all students</td>
+                <td><code>200 OK</code></td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-get">GET</span></td>
+                <td><code>/api/students/{id}</code></td>
+                <td>Retrieve student by ID</td>
+                <td><code>200 OK</code> (or <code>404 Not Found</code>)</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-put">PUT</span></td>
+                <td><code>/api/students/{id}</code></td>
+                <td>Update student details</td>
+                <td><code>200 OK</code> (or <code>404 Not Found</code>)</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-delete">DELETE</span></td>
+                <td><code>/api/students/{id}</code></td>
+                <td>Delete a student by ID</td>
+                <td><code>200 OK</code> (or <code>404 Not Found</code>)</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-get">GET</span></td>
+                <td><code>/api/students/course/{course}</code></td>
+                <td>Retrieve students filtered by course</td>
+                <td><code>200 OK</code></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>3. Database Configuration (MySQL)</h2>
+    <p>Configured in <code>src/main/resources/application.properties</code>:</p>
+    <pre><code>spring.datasource.url=jdbc:mysql://localhost:3306/student_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true
+spring.datasource.username=root
+spring.datasource.password=root
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect</code></pre>
+
+    <h2>4. Postman Demonstrations & Screenshots (Deliverables)</h2>
+
+    <!-- Screenshot 1 -->
+    <div class="screenshot-card">
+        <h4><span class="badge badge-post">POST</span> Endpoint: /api/students — Add New Student</h4>
+        <div class="screenshot-desc">Sends a JSON payload containing student details. Returns <strong>201 Created</strong> with the generated student ID.</div>
+        <img class="screenshot-img" src="screenshots/1_POST_Add_Student.png" alt="POST /api/students Screenshot">
+    </div>
+
+    <!-- Screenshot 2 -->
+    <div class="screenshot-card">
+        <h4><span class="badge badge-get">GET</span> Endpoint: /api/students — Retrieve All Students</h4>
+        <div class="screenshot-desc">Retrieves a JSON array of all registered students from the MySQL database. Returns <strong>200 OK</strong>.</div>
+        <img class="screenshot-img" src="screenshots/2_GET_All_Students.png" alt="GET /api/students Screenshot">
+    </div>
+
+    <!-- Screenshot 3 -->
+    <div class="screenshot-card">
+        <h4><span class="badge badge-get">GET</span> Endpoint: /api/students/{id} — Retrieve Student by ID</h4>
+        <div class="screenshot-desc">Retrieves specific student record by primary key (ID: 1). Returns <strong>200 OK</strong>.</div>
+        <img class="screenshot-img" src="screenshots/3_GET_Student_By_ID.png" alt="GET /api/students/1 Screenshot">
+    </div>
+
+    <!-- Screenshot 4 -->
+    <div class="screenshot-card">
+        <h4><span class="badge badge-get">GET</span> Endpoint: /api/students/{id} — Exception Handling (404 Not Found)</h4>
+        <div class="screenshot-desc">Demonstrates proper exception handling when requesting a non-existent student ID (999). Captured by <code>GlobalExceptionHandler</code>, returning <strong>404 Not Found</strong> with clean JSON error details.</div>
+        <img class="screenshot-img" src="screenshots/4_GET_Student_Not_Found_404.png" alt="GET /api/students/999 404 Exception Screenshot">
+    </div>
+
+    <!-- Screenshot 5 -->
+    <div class="screenshot-card">
+        <h4><span class="badge badge-put">PUT</span> Endpoint: /api/students/{id} — Update Student Details</h4>
+        <div class="screenshot-desc">Updates name, email, and course for student ID 1. Returns <strong>200 OK</strong> with updated entity.</div>
+        <img class="screenshot-img" src="screenshots/5_PUT_Update_Student.png" alt="PUT /api/students/1 Screenshot">
+    </div>
+
+    <!-- Screenshot 6 -->
+    <div class="screenshot-card">
+        <h4><span class="badge badge-get">GET</span> Endpoint: /api/students/course/{course} — Filter by Course</h4>
+        <div class="screenshot-desc">Queries students by course name ("Data Science") using Spring Data JPA derived query method. Returns <strong>200 OK</strong>.</div>
+        <img class="screenshot-img" src="screenshots/6_GET_By_Course.png" alt="GET /api/students/course/{course} Screenshot">
+    </div>
+
+    <!-- Screenshot 7 -->
+    <div class="screenshot-card">
+        <h4><span class="badge badge-delete">DELETE</span> Endpoint: /api/students/{id} — Delete Student</h4>
+        <div class="screenshot-desc">Deletes student record with ID 1. Returns <strong>200 OK</strong> with confirmation message.</div>
+        <img class="screenshot-img" src="screenshots/7_DELETE_Student.png" alt="DELETE /api/students/1 Screenshot">
+    </div>
+
+    <h2>5. Exception Handling Architecture</h2>
+    <p>Centralized exception handling is implemented using <code>@RestControllerAdvice</code> in <code>GlobalExceptionHandler.java</code>:</p>
+    <ul>
+        <li><strong><code>ResourceNotFoundException</code>:</strong> Thrown whenever a student ID does not exist in MySQL. Returns HTTP <strong>404 Not Found</strong> with timestamp, path, and error message.</li>
+        <li><strong><code>MethodArgumentNotValidException</code>:</strong> Catches validation errors (e.g. blank name, invalid email format, negative age) triggered by <code>@Valid</code>. Returns HTTP <strong>400 Bad Request</strong>.</li>
+        <li><strong><code>Exception</code>:</strong> Handles unexpected runtime server exceptions with HTTP <strong>500 Internal Server Error</strong>.</li>
+    </ul>
+
+    <h2>6. GitHub Submission Link</h2>
+    <p>Repository initialized with complete source code, configuration files, schema scripts, and Postman collection.</p>
+</div>
+
+</body>
+</html>
